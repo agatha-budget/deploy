@@ -1,0 +1,9 @@
+version: '3'
+
+tasks:
+  default:
+    cmds:
+      - task --list-all
+  hello:
+    cmds:
+      - echo "Bonjour à vous mes très chers amis !"

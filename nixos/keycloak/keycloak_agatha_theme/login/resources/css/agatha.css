@@ -1,0 +1,77 @@
+.login-pf body, .login-pf {
+	background: #f2f2f2;
+	color: #363636;
+}
+
+.card-pf {
+	background: #f2f2f2;
+}
+
+body {
+
+.pf-c-form-control {
+	border-radius: 0.25rem;
+}
+
+.login-pf-page .login-pf-page-header p {
+	color: #363636;
+}
+
+.logo {
+	max-height: 200px;
+	justify-self: center;
+}
+
+#kc-header-wrapper{
+	display: grid;
+}
+
+.disclaimer {
+	max-width: 400px;
+	justify-self: center;
+}
+
+.welcome {
+	font-size: 25px;
+	font-weight: bold;
+	text-align: center;
+	color: #124d74;
+}
+
+.old_version{
+	text-align: center;
+	color: #363636;
+}
+
+#kc-content {
+	display: grid;
+}
+
+#kc-content-wrapper {
+	justify-self: center;
+}
+
+
+#kc-page-title {
+	display: none;
+}
+
+
+#kc-login {
+	background: #007ea7;
+  	border-radius: 20px;
+ 	border: none;
+  	width: 100%;
+  	text-align: center;
+  	color: #fff;
+}	
+
+#kc-login:hover {
+	background: white;
+	box-shadow:inset 0px 0px 0px 3px #124d74;
+    	color: #124d74;
+}
+
+
+}
+
