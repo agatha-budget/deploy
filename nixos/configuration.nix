@@ -1,218 +1,59 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-#teqst
+{ config, pkgs, ... }:
 
-{ config, pkgs, lib, ... }:
-let 
-	unstable = import <nixos-unstable> {};
-in
 {
-	imports =
-		[ # Include the results of the hardware scan.
-		./hardware-configuration.nix
-		./keycloak
-		];
+  imports = [ ./hardware-configuration.nix ];
 
-# Use the GRUB 2 boot loader.
-	boot.loader.grub.enable = true;
-	boot.loader.grub.version = 2;
-# boot.loader.grub.efiSupport = true;
-# boot.loader.grub.efiInstallAsRemovable = true;
-# boot.loader.efi.efiSysMountPoint = "/boot/efi";
-# Define on which hard drive you want to install Grub.
-	boot.loader.grub.device = "/dev/vda"; # or "nodev" for efi only
+  # You should only edit the lines below if you know what you are doing.
 
-		networking.hostName = "kali"; # Define your hostname.
-# networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  boot.loader.grub.enable = true;
+  boot.loader.grub.device = "/dev/sda";
 
-# The global useDHCP flag is deprecated, therefore explicitly set to false here.
-# Per-interface useDHCP will be mandatory in the future, so this generated config
-# replicates the default behaviour.
-		networking.useDHCP = false;
-	networking.interfaces.ens3.useDHCP = true;
+  # This is the server's hostname you chose during the order process. Feel free to change it.
 
-# Set your time zone.
-	time.timeZone = "Europe/Paris";
+  networking.hostName = "epona";
 
-# List packages installed in system profile. To search, run:
-# $ nix search wget
-	environment.systemPackages = with pkgs; [
-# adminsys requires
-		vim git go-task
-# authentication requires
-		keycloak
-		custom_keycloak_themes.agatha
-# backend requires
-		postgresql_13 temurin-bin flyway
-# frontend requires
+  # We use the dhcpcd daemon to automatically configure your network. For IPv6 we need to make sure
+  # that no temporary addresses (or privacy extensions) are used. Your server is required to use the
+  # network data that is displayed in the Network tab in our client portal, otherwise your server will
+  # loose internet access due to network filters that are in place.
 
-	];
+  networking.dhcpcd.IPv6rs = true;
+  networking.dhcpcd.persistent = true;
+  networking.tempAddresses = "disabled";
+  networking.interfaces.ens3.tempAddress = "disabled";
 
-# Some programs need SUID wrappers, can be configured further or are
-# started in user sessions.
-	programs.mtr.enable = true;
-	programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
+  # To allow you to properly use and access your VPS via SSH, we enable the OpenSSH server and
+  # grant you root access. This is just our default configuration, you are free to remove root
+  # access, create your own users and further secure your server.
 
-# List services that you want to enable:
+  services.openssh.enable = true;
+  services.openssh.settings.PermitRootLogin = "yes";
+  networking.firewall.allowedTCPPorts = [ 22 ];
 
-# Enable the OpenSSH daemon.
-	services.openssh.enable = true;
-	services.openssh.passwordAuthentication = true;
+  # Under normal circumstances we would listen to your server's cloud-init callback and mark the server
+  # as installed at this point. As we don't deliver cloud-init with NixOS we have to use a workaround
+  # to indicate that your server is successfully installed. You can remove the cronjob after the server
+  # has been started the first time. It's no longer needed.
 
-# Open ports in the firewall.
-	networking.firewall.allowedTCPPorts = [ 7000 22 443 80 5432 38080];
-# networking.firewall.allowedUDPPorts = [ ... ];
-# Or disable the firewall altogether.
-# networking.firewall.enable = false;
+  services.cron.enable = true;
+  services.cron.systemCronJobs = [
+    "@reboot root sleep 30 && curl -L -XPOST -q https://portal.vps2day.com/api/service/v1/cloud-init/callback > /dev/null 2>&1"
+  ];
 
-# Define a user account. Don't forget to set a password with ‘passwd’.
-	users.users.erica = {
-		isNormalUser = true;
-		extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
-			openssh.authorizedKeys.keyFiles = [/home/erica/.ssh/authorized_keys/erica_nuwa.pub];
-	};
-	
-# This value determines the NixOS release with which your system is to be
-# compatible, in order to avoid breaking some software such as database
-# servers. You should change this only after NixOS release notes say you
-# should.
-	system.stateVersion = "19.09"; # Did you read the comment?
+  # Please remove the hardcoded password from the configuration and set
+  # the password using the "passwd" command after the first boot.
 
-######
-# Keycloak setup  // user management
-# see : https://nixos.org/manual/nixos/stable/index.html#module-services-keycloak
-#####
+  users.users.root = {
+    isNormalUser = false;
+    password = "mMbQ6CDXyRnPqnaeNW!m"; # changed
+  };
+  
+  users.users.erica = {
+    isNormalUser = true;
+    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+  };
 
-	services.keycloak = {
-		enable = true;
-		themes = with pkgs ; {
-			agatha = custom_keycloak_themes.agatha;
-		};
-		settings = {
-			hostname = "user.agatha-budget.fr";
-			http-port = 38080;
-			proxy = "passthrough";
-			http-enabled = true;
-		};
-		initialAdminPassword = "e6Wcm0RrtegMEHl";  # change on first login
-		database = {
-			type = "postgresql";
-			createLocally = true;
+  environment.systemPackages = with pkgs; [ vim git blue];
 
-			username = "keycloak";
-			passwordFile = "/secrets/keycloak-db_password";
-		};
-	};
 
-######
-# Backend setup
-#####
-	services.postgresql = {
-		enable = true;
-		package = pkgs.postgresql_13;
-		enableTCPIP = true;
-		authentication = pkgs.lib.mkOverride 13 ''
-			local all all trust
-			host all all 127.0.0.1/32 trust
-			host all all ::1/128 trust
-			host all all 0.0.0.0/0 md5
-			'';
-	};
-
-######
-
-	systemd.services.backend = {
-		description = "run the application backend";
-		wantedBy = [ "multi-user.target" ];
-		serviceConfig = {
-			User = "erica";
-			WorkingDirectory = "/home/erica/server/release_back/default";
-			ExecStartPre = "${pkgs.flyway}/bin/flyway -configFiles=flyway.conf migrate";
-			ExecStart = "${pkgs.temurin-bin}/bin/java -jar -Dlogback.configurationFile=logback.xml tresorier-backend-uber.jar";
-#Restart = "always";
-		};
-	};
-
-	systemd.services.betabackend = {
-		description = "run the application beta version of the backend";
-		wantedBy = [ "multi-user.target" ];
-		serviceConfig = {
-			User = "erica";
-			WorkingDirectory = "/home/erica/server/release_back/beta";
-			ExecStartPre = "${pkgs.flyway}/bin/flyway -configFiles=flyway.conf migrate";
-			ExecStart = "${pkgs.temurin-bin}/bin/java -jar -Dlogback.configurationFile=logback.xml tresorier-backend-uber.jar";
-	#Restart = "always";
-		};
-	};
-
-######
-# HTTPS : Lets encrypt
-#####
-	security.acme.acceptTerms = true;
-	security.acme.defaults.email = "erica@agatha-budget.fr";
-	users.users.nginx.extraGroups = [ "acme" ];
-	systemd.services.nginx.serviceConfig.ProtectHome = false;
-	services.nginx = {
-		enable = true;
-		recommendedProxySettings = true;
-		recommendedTlsSettings = true;
-		virtualHosts = {
-			"mon.agatha-budget.fr" = {
-				forceSSL = true;
-				enableACME = true;
-				root = "/var/www/front/";
-				locations."/" = {
-					tryFiles = "$uri $uri/ /index.html"; 
-				};
-			};
-			"beta.agatha-budget.fr" = {
-				forceSSL = true;
-				enableACME = true;
-				root = "/var/www/beta/";
-				locations."/" = {
-					tryFiles = "$uri $uri/ /index.html"; # redirect subpages url
-				};
-			};
-			"api.agatha-budget.fr" = {
-				forceSSL = true;
-				enableACME = true;
-				locations."/" = {
-					proxyPass = "http://localhost:7000";
-				};
-			};
-			"betapi.agatha-budget.fr" = {
-				forceSSL = true;
-				enableACME = true;
-				locations."/" = {
-					proxyPass = "http://localhost:8000";
-				};
-			};
-			"user.agatha-budget.fr" = {
-				forceSSL = true;
-				enableACME = true;
-				locations."/" = {
-						proxyPass = "http://localhost:${toString config.services.keycloak.settings.http-port}";
-						extraConfig = ''
-							# https://www.getpagespeed.com/server-setup/nginx/tuning-proxy_buffer_size-in-nginx
-                            proxy_buffer_size 410k;
-							proxy_busy_buffers_size 410k;
-							proxy_buffers 110 4k;
-						'';
-
-				};
-			};
-		};
-	};
-
-######
-# Cron : db save
-#####
-	services.cron = {
-		enable = true;
-		systemCronJobs = [
-			"0 1 * * *	erica	/run/current-system/sw/bin/sh /home/erica/server/scripts/export_database.sh ${pkgs.postgresql_13}"
-			"0 1 * * * erica	/run/current-system/sw/bin/sh /home/erica/server/scripts/sync_bank.sh"
-		];
-	};
 }
