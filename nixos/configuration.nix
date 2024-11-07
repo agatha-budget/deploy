@@ -39,7 +39,7 @@
 
   services.openssh.enable = true;
   services.openssh.settings.PermitRootLogin = "yes";
-  networking.firewall.allowedTCPPorts = [ 22 ];
+  networking.firewall.allowedTCPPorts = [ 22 80 ];
 
   users.users.root = {
     isNormalUser = false;
