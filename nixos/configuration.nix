@@ -1,7 +1,10 @@
 { config, pkgs, ... }:
 
 {
-  imports = [ ./hardware-configuration.nix ];
+  imports = [ 
+    ./hardware-configuration.nix 		
+    ./keycloak
+  ];
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
@@ -9,6 +12,7 @@
   # should.
 	system.stateVersion = "24.11"; # Did you read the comment?
 
+  time.timeZone = "Europe/Paris";
 
   # You should only edit the lines below if you know what you are doing.
 
