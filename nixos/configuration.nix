@@ -54,6 +54,65 @@
   };
 
   environment.systemPackages = with pkgs; [ vim git blue];
+  
+  ######################
+  ## Keycloak Service ##
+  ######################
 
+  ## see : https://nixos.org/manual/nixos/stable/index.html#module-services-keycloak
 
+  services.keycloak = {
+		enable = true;
+		themes = with pkgs ; {
+			agatha = custom_keycloak_themes.agatha;
+		};
+		settings = {
+			hostname = "user.agatha-budget.fr";
+			http-port = 38080;
+			proxy = "passthrough";
+			http-enabled = true;
+		};
+		initialAdminPassword = "e6Wcm0RrtegMEHl";  # change on first login
+		database = {
+			type = "postgresql";
+      username = "udu2xgpazxousvlttb9i";
+			passwordFile = "/home/erica/config/secret/keycloak-db-password";
+
+      # external DB
+      host = "bpbosc8sbpdroefwgm8w-postgresql.services.clever-cloud.com:50013";
+      name = "bpbosc8sbpdroefwgm8w";
+      
+      # local DB
+      #	createLocally = true;
+      
+		};
+	};
+
+  #####################
+  ## Backend Service ##
+  #####################
+
+    ## Backend default
+    systemd.services.backend = {
+		description = "run the application backend";
+		wantedBy = [ "multi-user.target" ];
+		serviceConfig = {
+			User = "erica";
+			WorkingDirectory = "/home/erica/deploy/release_back/default";
+			ExecStartPre = "${pkgs.flyway}/bin/flyway -configFiles=flyway.conf migrate";
+			ExecStart = "${pkgs.temurin-bin}/bin/java -jar -Dlogback.configurationFile=logback.xml tresorier-backend-uber.jar";
+		};
+	};
+
+  ## Backend beta
+	systemd.services.betabackend = {
+		description = "run the application beta version of the backend";
+		wantedBy = [ "multi-user.target" ];
+		serviceConfig = {
+			User = "erica";
+			WorkingDirectory = "/home/erica/deploy/release_back/beta";
+			ExecStartPre = "${pkgs.flyway}/bin/flyway -configFiles=flyway.conf migrate";
+			ExecStart = "${pkgs.temurin-bin}/bin/java -jar -Dlogback.configurationFile=logback.xml tresorier-backend-uber.jar";
+		};
+	};
 }
