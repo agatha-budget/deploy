@@ -3,6 +3,13 @@
 {
   imports = [ ./hardware-configuration.nix ];
 
+  # This value determines the NixOS release with which your system is to be
+  # compatible, in order to avoid breaking some software such as database
+  # servers. You should change this only after NixOS release notes say you
+  # should.
+	system.stateVersion = "24.11"; # Did you read the comment?
+
+
   # You should only edit the lines below if you know what you are doing.
 
   boot.loader.grub.enable = true;
@@ -86,10 +93,10 @@
       # external DB
       host = "bp1atasoat0dwgmqb9ag-postgresql.services.clever-cloud.com:50013";
       name = "bp1atasoat0dwgmqb9ag";
-      
+      useSSL = false;
+
       # local DB
       #	createLocally = true;
-      
 		};
 	};
 
