@@ -30,22 +30,8 @@
   services.openssh.settings.PermitRootLogin = "yes";
   networking.firewall.allowedTCPPorts = [ 22 ];
 
-  # Under normal circumstances we would listen to your server's cloud-init callback and mark the server
-  # as installed at this point. As we don't deliver cloud-init with NixOS we have to use a workaround
-  # to indicate that your server is successfully installed. You can remove the cronjob after the server
-  # has been started the first time. It's no longer needed.
-
-  services.cron.enable = true;
-  services.cron.systemCronJobs = [
-    "@reboot root sleep 30 && curl -L -XPOST -q https://portal.vps2day.com/api/service/v1/cloud-init/callback > /dev/null 2>&1"
-  ];
-
-  # Please remove the hardcoded password from the configuration and set
-  # the password using the "passwd" command after the first boot.
-
   users.users.root = {
     isNormalUser = false;
-    password = "mMbQ6CDXyRnPqnaeNW!m"; # changed
   };
   
   users.users.erica = {
@@ -53,8 +39,26 @@
     extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
   };
 
-  environment.systemPackages = with pkgs; [ vim git blue];
+  environment.systemPackages = with pkgs; [ 
+    vim 
+    git
+    keycloak
+		custom_keycloak_themes.agatha
+    temurin-bin 
+    flyway
+  ];
   
+
+  ##########
+  ## Cron ##
+  ##########
+	services.cron = {
+		enable = true;
+		systemCronJobs = [
+			"0 1 * * * erica	/run/current-system/sw/bin/sh /home/erica/deploy/scripts/sync_bank.sh"
+		];
+	};
+
   ######################
   ## Keycloak Service ##
   ######################
@@ -75,12 +79,12 @@
 		initialAdminPassword = "e6Wcm0RrtegMEHl";  # change on first login
 		database = {
 			type = "postgresql";
-      username = "udu2xgpazxousvlttb9i";
+      username = "u5jsxn5dekflumihlgwz";
 			passwordFile = "/home/erica/config/secret/keycloak-db-password";
 
       # external DB
-      host = "bpbosc8sbpdroefwgm8w-postgresql.services.clever-cloud.com:50013";
-      name = "bpbosc8sbpdroefwgm8w";
+      host = "bp1atasoat0dwgmqb9ag-postgresql.services.clever-cloud.com:50013";
+      name = "bp1atasoat0dwgmqb9ag";
       
       # local DB
       #	createLocally = true;
@@ -92,8 +96,8 @@
   ## Backend Service ##
   #####################
 
-    ## Backend default
-    systemd.services.backend = {
+  ## Backend default
+  systemd.services.backend = {
 		description = "run the application backend";
 		wantedBy = [ "multi-user.target" ];
 		serviceConfig = {
@@ -113,6 +117,65 @@
 			WorkingDirectory = "/home/erica/deploy/release_back/beta";
 			ExecStartPre = "${pkgs.flyway}/bin/flyway -configFiles=flyway.conf migrate";
 			ExecStart = "${pkgs.temurin-bin}/bin/java -jar -Dlogback.configurationFile=logback.xml tresorier-backend-uber.jar";
+		};
+	};
+
+  ###########
+  ## NGINX ##
+  ###########
+
+  security.acme.acceptTerms = true;
+	security.acme.defaults.email = "erica@agatha-budget.fr";
+	users.users.nginx.extraGroups = [ "acme" ];
+	systemd.services.nginx.serviceConfig.ProtectHome = false;
+	services.nginx = {
+		enable = true;
+		recommendedProxySettings = true;
+		recommendedTlsSettings = true;
+		virtualHosts = {
+			"mon2.agatha-budget.fr" = {
+				forceSSL = true;
+				enableACME = true;
+				root = "/var/www/front/";
+				locations."/" = {
+					tryFiles = "$uri $uri/ /index.html"; 
+				};
+			};
+			"beta2.agatha-budget.fr" = {
+				forceSSL = true;
+				enableACME = true;
+				root = "/var/www/beta/";
+				locations."/" = {
+					tryFiles = "$uri $uri/ /index.html"; # redirect subpages url
+				};
+			};
+			"api2.agatha-budget.fr" = {
+				forceSSL = true;
+				enableACME = true;
+				locations."/" = {
+					proxyPass = "http://localhost:7000";
+				};
+			};
+			"betapi2.agatha-budget.fr" = {
+				forceSSL = true;
+				enableACME = true;
+				locations."/" = {
+					proxyPass = "http://localhost:8000";
+				};
+			};
+			"user2.agatha-budget.fr" = {
+				forceSSL = true;
+				enableACME = true;
+				locations."/" = {
+						proxyPass = "http://localhost:${toString config.services.keycloak.settings.http-port}";
+            # https://www.getpagespeed.com/server-setup/nginx/tuning-proxy_buffer_size-in-nginx
+						extraConfig = ''
+              proxy_buffer_size 410k;
+							proxy_busy_buffers_size 410k;
+							proxy_buffers 110 4k;
+						'';
+				};
+			};
 		};
 	};
 }
