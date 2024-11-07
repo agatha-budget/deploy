@@ -42,6 +42,7 @@
   environment.systemPackages = with pkgs; [ 
     vim 
     git
+    go-task
     keycloak
 		custom_keycloak_themes.agatha
     temurin-bin 
