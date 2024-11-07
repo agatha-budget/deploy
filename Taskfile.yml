@@ -7,3 +7,8 @@ tasks:
   hello:
     cmds:
       - echo "Bonjour à vous mes très chers amis !"
+  update:
+    cmds:
+      - git pull
+      - git -C ../config/ pull
+      - sudo nixos-rebuild switch
