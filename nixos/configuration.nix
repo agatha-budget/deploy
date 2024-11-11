@@ -42,7 +42,8 @@
 	# 22 ssh
 	# 80 http
 	# 38080 keycloak
-  networking.firewall.allowedTCPPorts = [ 22 80 38080];
+	# 443 TCP/IP for https
+  networking.firewall.allowedTCPPorts = [ 22 80 38080 443];
 
   users.users.root = {
     isNormalUser = false;
