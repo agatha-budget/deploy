@@ -89,6 +89,7 @@
 		settings = {
 			hostname = "user2.agatha-budget.fr";
 			http-port = 38080;
+			proxy-headers = "xforwarded";
 			proxy = "passthrough";
 			http-enabled = true;
 		};
