@@ -41,7 +41,7 @@
   services.openssh.settings.PermitRootLogin = "yes";
 	# 22 ssh
 	# 80 http
-	# 388080 keycloak
+	# 38080 keycloak
   networking.firewall.allowedTCPPorts = [ 22 80 38080];
 
   users.users.root = {
@@ -98,10 +98,10 @@
 			passwordFile = "/home/erica/config/secret/keycloak-db-password";
 
       # external DB
-      host = "bp1atasoat0dwgmqb9ag-postgresql.services.clever-cloud.com";
-			port = 50013;
-      name = "bp1atasoat0dwgmqb9ag";
-      useSSL = false;
+			host = "hv-par8-024.clvrcld.net";
+			port = 13750;
+			name = "brsocsdvagoxjswspfo6";
+			useSSL = false;
 
       # local DB
       #	createLocally = true;
