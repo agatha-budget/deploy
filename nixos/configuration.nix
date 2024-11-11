@@ -95,7 +95,8 @@
 			passwordFile = "/home/erica/config/secret/keycloak-db-password";
 
       # external DB
-      host = "bp1atasoat0dwgmqb9ag-postgresql.services.clever-cloud.com:50013";
+      host = "bp1atasoat0dwgmqb9ag-postgresql.services.clever-cloud.com";
+			port = 50013;
       name = "bp1atasoat0dwgmqb9ag";
       useSSL = false;
 
