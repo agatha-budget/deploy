@@ -87,7 +87,7 @@
 			agatha = custom_keycloak_themes.agatha;
 		};
 		settings = {
-			hostname = "user.agatha-budget.fr";
+			hostname = "user2.agatha-budget.fr";
 			http-port = 38080;
 			proxy = "passthrough";
 			http-enabled = true;
