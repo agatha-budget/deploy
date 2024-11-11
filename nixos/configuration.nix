@@ -39,7 +39,10 @@
 
   services.openssh.enable = true;
   services.openssh.settings.PermitRootLogin = "yes";
-  networking.firewall.allowedTCPPorts = [ 22 80 ];
+	# 22 ssh
+	# 80 http
+	# 388080 keycloak
+  networking.firewall.allowedTCPPorts = [ 22 80 38080];
 
   users.users.root = {
     isNormalUser = false;

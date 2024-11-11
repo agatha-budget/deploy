@@ -12,3 +12,6 @@ tasks:
       - git pull
       - git -C ../config/ pull
       - sudo nixos-rebuild switch
+  log_keycloak:
+    cmds:
+      - journalctl -u keycloak -e
