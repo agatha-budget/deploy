@@ -96,13 +96,13 @@
 		initialAdminPassword = "adminin";  # change on first login
 		database = {
 			type = "postgresql";
-      		username = "u6sws8fjeu3c5fjgq8g0";
+      		username = "uajeynzqyi9byrqwan8s";
 			passwordFile = "/home/erica/config/secret/keycloak-db-password";
 
       # external DB
-			host = "hv-par8-008.clvrcld.net";
-			port = 11703;
-			name = "bm7wzozpsofh2nfiid0z";
+			host = "hv-par7-015.clvrcld.net";
+			port = 12470;
+			name = "bx9j2dzwrg6bam6ho1fy";
 			useSSL = false;
 
       # local DB
