@@ -154,7 +154,7 @@
 			"mon2.agatha-budget.fr" = {
 				forceSSL = true;
 				enableACME = true;
-				root = "/var/www/front/";
+				root = "/var/www/front/dist";
 				locations."/" = {
 					tryFiles = "$uri $uri/ /index.html"; 
 				};
@@ -162,7 +162,7 @@
 			"beta2.agatha-budget.fr" = {
 				forceSSL = true;
 				enableACME = true;
-				root = "/var/www/beta/";
+				root = "/var/www/beta/dist";
 				locations."/" = {
 					tryFiles = "$uri $uri/ /index.html"; # redirect subpages url
 				};
