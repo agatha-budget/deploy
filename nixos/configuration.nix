@@ -131,7 +131,7 @@
 			StateDirectoryMode = "0750";
 		};
 		script = ''
-			${strings.removeSuffix "kc.sh start --optimized\n" config.systemd.services.keycloak.script}
+			${lib.strings.removeSuffix "kc.sh start --optimized\n" config.systemd.services.keycloak.script}
 				EDIR="/var/lib/keycloak"
 				EDIRT="$EDIR/$(date '+%Y/%m/%d/%H:%M:%S')"
 				mkdir -p $EDIRT
