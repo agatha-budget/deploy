@@ -116,7 +116,7 @@
 		after = p.after;
 		before = [ "keycloak.service" ];
 		wantedBy = [ "multi-user.target" ];
-		environment = mkForce p.environment;
+		environment = lib.mkForce p.environment;
 		serviceConfig =  let origin = p.serviceConfig; in {
 			Type = "oneshot";
 			RemainAfterExit = true;
