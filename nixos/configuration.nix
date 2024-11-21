@@ -112,7 +112,7 @@
 
 	systemd.services.keycloakExportRealms =
 	let p = config.systemd.services.keycloak;
-	in lib.mkIf config.services.keycloak.enable {
+	in mkIf config.services.keycloak.enable {
 		after = p.after;
 		before = [ "keycloak.service" ];
 		wantedBy = [ "multi-user.target" ];
