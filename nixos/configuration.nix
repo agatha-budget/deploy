@@ -93,16 +93,16 @@
 			proxy = "passthrough";
 			http-enabled = true;
 		};
-		initialAdminPassword = "e6Wcm0RrtegMEHl";  # change on first login
+		initialAdminPassword = "adminin";  # change on first login
 		database = {
 			type = "postgresql";
-      username = "u5jsxn5dekflumihlgwz";
+      		username = "u5jsxn5dekflumihlgwz";
 			passwordFile = "/home/erica/config/secret/keycloak-db-password";
 
       # external DB
-			host = "hv-par8-024.clvrcld.net";
-			port = 13750;
-			name = "brsocsdvagoxjswspfo6";
+			host = "hv-par8-008.clvrcld.net";
+			port = 11703;
+			name = "bm7wzozpsofh2nfiid0z";
 			useSSL = false;
 
       # local DB

@@ -15,3 +15,7 @@ tasks:
   log_keycloak:
     cmds:
       - journalctl -u keycloak -e
+  import_database:
+    # https://stackoverflow.com/a/6842496/2933593
+    cmds:
+      - psql --username=<db_user_name> databasename < data_base_dump
