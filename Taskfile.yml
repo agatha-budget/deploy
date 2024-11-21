@@ -9,8 +9,6 @@ tasks:
       - echo "Bonjour à vous mes très chers amis !"
   update:
     cmds:
-      - eval `ssh-agent -s`
-      - ssh-add ~/.ssh/erica_epona
       - git pull
       - git -C ../config/ pull
       - sudo nixos-rebuild switch
@@ -21,3 +19,7 @@ tasks:
     # https://stackoverflow.com/a/6842496/2933593
     cmds:
       - psql --username=<db_user_name> databasename < data_base_dump
+  ssh_add:
+    cmds:
+      - eval `ssh-agent -s`
+      - ssh-add ~/.ssh/erica_epona
