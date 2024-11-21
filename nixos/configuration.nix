@@ -96,47 +96,18 @@
 		initialAdminPassword = "adminin";  # change on first login
 		database = {
 			type = "postgresql";
-      		username = "uajeynzqyi9byrqwan8s";
+      		username = "uxaupaibkdzydp4lhf18";
 			passwordFile = "/home/erica/config/secret/keycloak-db-password";
 
       # external DB
-			host = "hv-par7-015.clvrcld.net";
+			host = "bscsqemngqrehdewjcvq-postgresql.services.clever-cloud.com";
 			port = 12470;
-			name = "bx9j2dzwrg6bam6ho1fy";
+			name = "bscsqemngqrehdewjcvq";
 			useSSL = false;
 
       # local DB
       #	createLocally = true;
 		};
-	};
-
-	systemd.services.keycloakExportRealms =
-	let p = config.systemd.services.keycloak;
-	in lib.mkIf config.services.keycloak.enable {
-		after = p.after;
-		before = [ "keycloak.service" ];
-		wantedBy = [ "multi-user.target" ];
-		environment = lib.mkForce p.environment;
-		serviceConfig =  let origin = p.serviceConfig; in {
-			Type = "oneshot";
-			RemainAfterExit = true;
-			User = origin.User;
-			Group = origin.Group;
-			LoadCredential = origin.LoadCredential;
-			DynamicUser =  origin.DynamicUser;
-			RuntimeDirectory = origin.RuntimeDirectory;
-			RuntimeDirectoryMode = origin.RuntimeDirectoryMode;
-			AmbientCapabilities = origin.AmbientCapabilities;
-			StateDirectory = "keycloak";
-			StateDirectoryMode = "0750";
-		};
-		script = ''
-			${lib.strings.removeSuffix "kc.sh start --optimized\n" config.systemd.services.keycloak.script}
-				EDIR="/var/lib/keycloak"
-				EDIRT="$EDIR/$(date '+%Y/%m/%d/%H:%M:%S')"
-				mkdir -p $EDIRT
-				kc.sh export --optimized --dir=$EDIRT
-		'';
 	};
 
   #####################
