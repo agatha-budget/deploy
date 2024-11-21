@@ -9,6 +9,8 @@ tasks:
       - echo "Bonjour à vous mes très chers amis !"
   update:
     cmds:
+      - eval `ssh-agent -s`
+      - ssh-add ~/.ssh/erica_epona
       - git pull
       - git -C ../config/ pull
       - sudo nixos-rebuild switch

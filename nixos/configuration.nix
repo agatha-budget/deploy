@@ -96,7 +96,7 @@
 		initialAdminPassword = "adminin";  # change on first login
 		database = {
 			type = "postgresql";
-      		username = "u5jsxn5dekflumihlgwz";
+      		username = "u6sws8fjeu3c5fjgq8g0";
 			passwordFile = "/home/erica/config/secret/keycloak-db-password";
 
       # external DB
