@@ -11,6 +11,10 @@ tasks:
     cmds:
       - git pull
       - git -C ../config/ pull
+      - sudo rm -r /var/www/beta 
+      - sudo rm -r /var/www/front
+      - sudo cp -r release_front/beta/dist /var/www/beta
+      - sudo cp -r release_front/default/dist /var/www/front 
       - sudo nixos-rebuild switch
   log_keycloak:
     cmds:
