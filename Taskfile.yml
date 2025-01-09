@@ -20,9 +20,8 @@ tasks:
     cmds:
       - journalctl -u keycloak -e
   import_database:
-    # https://stackoverflow.com/a/6842496/2933593
     cmds:
-      - psql --username=<db_user_name> databasename < data_base_dump
+      - pg_restore -h <host> -p <port> -U <db_user_name> -d databasename -c data_base_dump
   ssh_add:
     cmds:
       - eval `ssh-agent -s`

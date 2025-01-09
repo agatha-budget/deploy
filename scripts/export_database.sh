@@ -1,16 +1,16 @@
 ## Agatha
 
-filename=/home/erica/backup/$(date +"%Y-%m-%d-%H-%M-%S")_backup.sql
+filename=/home/erica/backup/$(date +"%Y-%m-%d-%H-%M-%S")_backup
 if [ $# -eq 0 ]
-then pg_dump -U postgres tresorier > $filename
+then pg_dump -U postgres tresorier -F c > $filename
 else $1/bin/pg_dump -U postgres tresorier > $filename
 fi
 
 ## Keycloak
 
-filename1=/home/erica/backup/keycloak_$(date +"%Y-%m-%d-%H-%M-%S")_backup.sql
+filename1=/home/erica/backup/keycloak_$(date +"%Y-%m-%d-%H-%M-%S")_backup
 if [ $# -eq 0 ]
-then pg_dump -U keycloak keycloak > $filename1
+then pg_dump -U keycloak keycloak -F c > $filename1
 else $1/bin/pg_dump -U keycloak keycloak > $filename1
 fi
 
