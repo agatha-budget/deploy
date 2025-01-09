@@ -1,8 +1,8 @@
 timestamp=$(date +"%Y-%m-%d-%H-%M-%S")
-my=$(curl --silent --output /dev/null --write-out "%{http_code}" -X 'GET'   'https://betapi2.agatha-budget.fr/ping'   -H 'accept: application/json'   -d '')
-echo ${my}
+ping_status=$(curl --silent --output /dev/null --write-out "%{http_code}" -X 'GET'   'https://betapi2.agatha-budget.fr/ping'   -H 'accept: application/json'   -d '')
+echo ${ping_status}
 
-case ${my} in 
+case ${ping_status} in 
     *200*)
         echo ${timestamp}_RAS_beta >> /home/erica/ping.txt
         ;;
@@ -12,10 +12,10 @@ case ${my} in
         ;;
 esac
 
-my=$(curl --silent --output /dev/null --write-out "%{http_code}" -X 'GET'   'https://api2.agatha-budget.fr/ping'   -H 'accept: application/json'   -d '')
-echo ${my}
+ping_status=$(curl --silent --output /dev/null --write-out "%{http_code}" -X 'GET'   'https://api2.agatha-budget.fr/ping'   -H 'accept: application/json'   -d '')
+echo ${ping_status}
 
-case ${my} in 
+case ${ping_status} in 
     *200*)
         echo ${timestamp}_RAS_default >> /home/erica/ping.txt
         ;;
