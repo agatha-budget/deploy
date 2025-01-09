@@ -72,9 +72,7 @@
 		enable = true;
 		systemCronJobs = [
 			"0 1 * * * erica	/run/current-system/sw/bin/sh /home/erica/deploy/scripts/sync_bank.sh"
-			"* * * * * root	/run/current-system/sw/bin/sh /home/erica/server/scripts/ping.sh"
-			"* * * * * root	/run/current-system/sw/bin/sh /home/erica/server/scripts/pingu.sh"
-			"* * * * * root	date >> /home/erica/cron.log"
+			"* * * * * root	/run/current-system/sw/bin/sh /home/erica/deploy/scripts/ping.sh"
 		];
 	};
 
