@@ -1,12 +1,13 @@
+timestamp=$(date +"%Y-%m-%d-%H-%M-%S")_backup
 my=$(curl --silent --output /dev/null --write-out "%{http_code}" -X 'GET'   'https://betapi2.agatha-budget.fr/ping'   -H 'accept: application/json'   -d '')
 echo ${my}
 
 case ${my} in 
     *200*)
-        echo "RAS"
+        echo $(timestamp)_RAS_beta >> /home/erica/ping.txt
         ;;
     *)
-        echo "PROBLEM"
+        echo $(timestamp)_PROBLEM_beta >> /home/erica/ping.txt
         systemctl restart betabackend
         ;;
 esac
@@ -16,10 +17,10 @@ echo ${my}
 
 case ${my} in 
     *200*)
-        echo "RAS"
+        echo $(timestamp)_RAS_default >> /home/erica/ping.txt
         ;;
     *)
-        echo "PROBLEM"
+        echo $(timestamp)_PROBLEM_default >> /home/erica/ping.txt
         systemctl restart backend
         ;;
 esac
