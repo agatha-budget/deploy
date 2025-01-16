@@ -103,7 +103,7 @@
 			passwordFile = "/home/erica/config/secret/keycloak-db-password";
 
       # external DB
-			host = "hv-par6-010.clvrcld.net";
+			host = "hv-par6-002.clvrcld.net";
 			port = 10896;
 			name = "b0m6zk4dgfe9lburlbj1";
 			useSSL = false;
