@@ -174,14 +174,14 @@
 				forceSSL = true;
 				enableACME = true;
 				locations."/" = {
-					proxyPass = "http://localhost:7000";
+					proxyPass = "http://127.0.0.1:7000";
 				};
 			};
 			"betapi.agatha-budget.fr" = {
 				forceSSL = true;
 				enableACME = true;
 				locations."/" = {
-					proxyPass = "http://localhost:8000";
+					proxyPass = "http://127.0.0.1:8000";
 				};
 			};
 			"user.agatha-budget.fr" = {
