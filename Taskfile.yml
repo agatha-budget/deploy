@@ -25,3 +25,8 @@ tasks:
   ssh_add:
     cmds:
       - eval `ssh-agent -s` && ssh-add ~/.ssh/erica_epona
+  upgrade-nixos:
+    cmds:
+      - sudo nixos-rebuild switch --upgrade
+
+    
