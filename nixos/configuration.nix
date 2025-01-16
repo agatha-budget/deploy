@@ -90,7 +90,7 @@
 			agatha = custom_keycloak_themes.agatha;
 		};
 		settings = {
-			hostname = "user2.agatha-budget.fr";
+			hostname = "user.agatha-budget.fr";
 			http-port = 38080;
 			proxy-headers = "xforwarded";
 			proxy = "passthrough";
@@ -154,7 +154,7 @@
 		recommendedProxySettings = true;
 		recommendedTlsSettings = true;
 		virtualHosts = {
-			"mon2.agatha-budget.fr" = {
+			"mon.agatha-budget.fr" = {
 				forceSSL = true;
 				enableACME = true;
 				root = "/var/www/front/";
@@ -162,7 +162,7 @@
 					tryFiles = "$uri $uri/ /index.html"; 
 				};
 			};
-			"beta2.agatha-budget.fr" = {
+			"beta.agatha-budget.fr" = {
 				forceSSL = true;
 				enableACME = true;
 				root = "/var/www/beta/";
@@ -170,21 +170,21 @@
 					tryFiles = "$uri $uri/ /index.html"; # redirect subpages url
 				};
 			};
-			"api2.agatha-budget.fr" = {
+			"api.agatha-budget.fr" = {
 				forceSSL = true;
 				enableACME = true;
 				locations."/" = {
 					proxyPass = "http://localhost:7000";
 				};
 			};
-			"betapi2.agatha-budget.fr" = {
+			"betapi.agatha-budget.fr" = {
 				forceSSL = true;
 				enableACME = true;
 				locations."/" = {
 					proxyPass = "http://localhost:8000";
 				};
 			};
-			"user2.agatha-budget.fr" = {
+			"user.agatha-budget.fr" = {
 				forceSSL = true;
 				enableACME = true;
 				locations."/" = {
