@@ -188,7 +188,7 @@
 				forceSSL = true;
 				enableACME = true;
 				locations."/" = {
-						proxyPass = "http://localhost:${toString config.services.keycloak.settings.http-port}";
+						proxyPass = "http://127.0.0.1:${toString config.services.keycloak.settings.http-port}";
             # https://www.getpagespeed.com/server-setup/nginx/tuning-proxy_buffer_size-in-nginx
 						extraConfig = ''
               proxy_buffer_size 410k;
