@@ -1,5 +1,5 @@
 timestamp=$(date +"%Y-%m-%d-%H-%M-%S")
-ping_status=$(curl --silent --output /dev/null --write-out "%{http_code}" -X 'GET'   'https://betapi2.agatha-budget.fr/ping'   -H 'accept: application/json'   -d '')
+ping_status=$(curl --silent --output /dev/null --write-out "%{http_code}" -X 'GET'   'https://betapi.agatha-budget.fr/ping'   -H 'accept: application/json'   -d '')
 echo ${ping_status}
 
 case ${ping_status} in 
@@ -12,7 +12,7 @@ case ${ping_status} in
         ;;
 esac
 
-ping_status=$(curl --silent --output /dev/null --write-out "%{http_code}" -X 'GET'   'https://api2.agatha-budget.fr/ping'   -H 'accept: application/json'   -d '')
+ping_status=$(curl --silent --output /dev/null --write-out "%{http_code}" -X 'GET'   'https://api.agatha-budget.fr/ping'   -H 'accept: application/json'   -d '')
 echo ${ping_status}
 
 case ${ping_status} in 
