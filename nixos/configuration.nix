@@ -141,6 +141,18 @@
 		};
 	};
 
+	## Backend alpha
+	systemd.services.alphabackend = {
+		description = "run the application alpha version of the backend";
+		wantedBy = [ "multi-user.target" ];
+		serviceConfig = {
+			User = "erica";
+			WorkingDirectory = "/home/erica/deploy/release_back/alpha";
+			ExecStartPre = "${pkgs.flyway}/bin/flyway -configFiles=flyway.conf migrate";
+			ExecStart = "${pkgs.temurin-bin}/bin/java -jar -Dlogback.configurationFile=logback.xml tresorier-backend-uber.jar";
+		};
+	};
+
   ###########
   ## NGINX ##
   ###########
@@ -170,6 +182,14 @@
 					tryFiles = "$uri $uri/ /index.html"; # redirect subpages url
 				};
 			};
+			"alpha.agatha-budget.fr" = {
+				forceSSL = true;
+				enableACME = true;
+				root = "/var/www/alpha/";
+				locations."/" = {
+					tryFiles = "$uri $uri/ /index.html"; # redirect subpages url
+				};
+			};
 			"api.agatha-budget.fr" = {
 				forceSSL = true;
 				enableACME = true;
@@ -182,6 +202,13 @@
 				enableACME = true;
 				locations."/" = {
 					proxyPass = "http://127.0.0.1:8000";
+				};
+			};
+			"alphapi.agatha-budget.fr" = {
+				forceSSL = true;
+				enableACME = true;
+				locations."/" = {
+					proxyPass = "http://127.0.0.1:9000";
 				};
 			};
 			"user.agatha-budget.fr" = {
