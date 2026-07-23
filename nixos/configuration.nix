@@ -208,7 +208,7 @@
 				forceSSL = true;
 				enableACME = true;
 				locations."/" = {
-					proxyPass = "http://127.0.0.1:9000";
+					proxyPass = "http://127.0.0.1:7001";
 				};
 			};
 			"user.agatha-budget.fr" = {
